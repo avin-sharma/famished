@@ -2,8 +2,13 @@
 const apiKey = `${process.env.REACT_APP_API_KEY}`
 
 let Yelp = {
-    search(term, location, sortBy){
-        return fetch(`https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/search?term=${term}&location=${location}&sort_by=${sortBy}`,
+    search(term, location, latitude, longitude, sortBy){
+        let url = `https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/search?term=${term}&latitude=${latitude}&longitude=${longitude}&sort_by=${sortBy}`
+        if(latitude === ''){
+            url = `https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/search?term=${term}&location=${location}&sort_by=${sortBy}`
+        }
+        
+        return fetch(url,
         {
             headers: {
                 Authorization: `Bearer ${apiKey}`
