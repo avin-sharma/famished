@@ -4,6 +4,9 @@
     justify-content: space-between;
     width: 16.66rem;
     margin: 0 .5rem 2.3rem .5rem;
+    border: 2px solid #CCA353;
+    border-radius: 5%;
+    padding: 10px;
   }
   
   .Business .image-container {
