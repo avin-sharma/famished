@@ -8,12 +8,26 @@ class App extends React.Component {
   constructor(props){
     super(props)
     this.state = {
-      businesses: []
+      businesses: [],
+      latitude: '',
+      longitude: ''
     }
     this.searchYelp = this.searchYelp.bind(this)
+
+    if ("geolocation" in navigator) {
+      /* geolocation is available */
+      navigator.geolocation.getCurrentPosition(position => {
+        this.setState({
+          latitude : position.coords.latitude,
+          longitude : position.coords.longitude,
+        }, () => {
+        })
+      })
+    }
+    
   }
-  searchYelp(term, location, sortBy){
-    Yelp.search(term, location, sortBy).then(businesses => {
+  searchYelp(term, location, latitude, longitude, sortBy){
+    Yelp.search(term, location, latitude, longitude, sortBy).then(businesses => {
       this.setState({
         businesses: businesses
       })
@@ -21,10 +35,11 @@ class App extends React.Component {
   }
 
   render(){
+    
     return (
       <div className="App">
         <h1>famished</h1>
-        <SearchBar searchYelp={this.searchYelp} />
+        <SearchBar searchYelp={this.searchYelp} latitude={this.state.latitude} longitude={this.state.longitude} />
         <BusinessList businesses={this.state.businesses}/>
       </div>
     );

@@ -8,7 +8,8 @@ class SearchBar extends React.Component {
         this.state = {
             term: '',
             location: '',
-            sortBy: 'best_match'
+            sortBy: 'best_match',
+            isLocationEmpty: false
         }
 
         this.sortByOptions = {
@@ -19,6 +20,7 @@ class SearchBar extends React.Component {
         this.handleTermChange = this.handleTermChange.bind(this)
         this.handleLocationChange = this.handleLocationChange.bind(this)
         this.handleSearch = this.handleSearch.bind(this)
+        this.handleKeyPress = this.handleKeyPress.bind(this)
     }
 
     getSortByClass(sortByOption){
@@ -49,8 +51,24 @@ class SearchBar extends React.Component {
     }
 
     handleSearch(event){
-        this.props.searchYelp(this.state.term, this.state.location, this.state.sortBy)
-        event.preventDefault()
+        if(this.state.location === '' && this.props.latitude === ''){
+            this.setState({
+                isLocationEmpty: true
+            })
+        }
+        else{
+            this.setState({
+                isLocationEmpty: false
+            })
+            this.props.searchYelp(this.state.term, this.state.location, this.props.latitude, this.props.longitude, this.state.sortBy)
+            event.preventDefault()
+        }
+    }
+
+    handleKeyPress(event){
+        if(event.key === 'Enter'){
+            this.handleSearch(event)
+        }
     }
 
     renderSortByOptions(){
@@ -61,6 +79,8 @@ class SearchBar extends React.Component {
     }
 
     render(){
+        const location = this.state.isLocationEmpty ? 'SearchBar-location-empty' : 'SearchBar-location'
+        const location_placeholder = this.state.isLocationEmpty ? 'Please enter a location!' : 'Where?'
         return (
             <div className="SearchBar">
                 <div className="SearchBar-sort-options">
@@ -69,8 +89,8 @@ class SearchBar extends React.Component {
                     </ul>
                 </div>
                 <div className="SearchBar-fields">
-                    <input placeholder="Search Businesses" onChange={this.handleTermChange} />
-                    <input placeholder="Where?" onChange={this.handleLocationChange} />
+                    <input placeholder="Search Businesses" onChange={this.handleTermChange}/>
+                    <input id={location} placeholder={location_placeholder} onChange={this.handleLocationChange} onKeyPress={this.handleKeyPress}/>
                 </div>
                 <div className="SearchBar-submit">
                     <button onClick={this.handleSearch}>Let's Go</button>
