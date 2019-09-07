@@ -89,7 +89,7 @@ class SearchBar extends React.Component {
                     </ul>
                 </div>
                 <div className="SearchBar-fields">
-                    <input placeholder="Search Businesses" onChange={this.handleTermChange}/>
+                    <input placeholder="Restaurants / Groceries / Barber..." onChange={this.handleTermChange} onKeyPress={this.handleKeyPress}/>
                     <input id={location} placeholder={location_placeholder} onChange={this.handleLocationChange} onKeyPress={this.handleKeyPress}/>
                 </div>
                 <div className="SearchBar-submit">
